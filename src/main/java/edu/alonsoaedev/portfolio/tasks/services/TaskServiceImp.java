@@ -21,7 +21,7 @@ public class TaskServiceImp implements TaskService{
 
     @Override
     public List<Task> list() {
-        return null;
+        return taskRepository.findAll();
     }
 
     @Override
