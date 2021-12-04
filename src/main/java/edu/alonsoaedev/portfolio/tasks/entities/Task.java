@@ -8,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import edu.alonsoaedev.portfolio.tasks.exceptions.EmptyTaskContentException;
+
 @Entity
 @Table(name = "taks")
 public class Task {
@@ -18,7 +22,12 @@ public class Task {
     private String content;
     private boolean checked;
 
-    public Task(String content) {
+    public Task() {
+        content = "Ooops";
+    }
+
+    public Task(String content) throws EmptyTaskContentException {
+        if (isEmpty(content)) throw new EmptyTaskContentException();
         this.content = content;
     }
 
@@ -34,7 +43,8 @@ public class Task {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(String content) throws EmptyTaskContentException {
+        if (isEmpty(content)) throw new EmptyTaskContentException();
         this.content = content;
     }
 
@@ -46,12 +56,16 @@ public class Task {
         this.checked = checked;
     }
 
+    private boolean isEmpty(String content) {
+        return content == null || content.isBlank();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return content.equals(task.content);
+        return content.equalsIgnoreCase(task.content);
     }
 
     @Override
