@@ -76,4 +76,13 @@ public class TaskController {
         taskService.remove(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/check")
+    ResponseEntity<Task> checkTask(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(taskService.check(id));
+        } catch (TaskNotFoundException taskNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, taskNotFoundException.getMessage(), taskNotFoundException);
+        }
+    }
 }
