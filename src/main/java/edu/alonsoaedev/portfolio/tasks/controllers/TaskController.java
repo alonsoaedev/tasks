@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
@@ -51,6 +52,19 @@ public class TaskController {
     ResponseEntity<Task> retrieveOneTask(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(taskService.retrieve(id));
+        } catch (TaskNotFoundException taskNotFoundException) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, taskNotFoundException.getMessage(), taskNotFoundException);
+        }
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<Task> modifyTask(@PathVariable Long id, @RequestBody Task task) {
+        try {
+            return ResponseEntity.ok(taskService.modify(id, task.getContent()));
+        } catch (EmptyTaskContentException emptyTaskContentException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, emptyTaskContentException.getMessage(), emptyTaskContentException);
+        } catch (DuplicateTaskException duplicateTaskException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, duplicateTaskException.getMessage(), duplicateTaskException);
         } catch (TaskNotFoundException taskNotFoundException) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, taskNotFoundException.getMessage(), taskNotFoundException);
         }
