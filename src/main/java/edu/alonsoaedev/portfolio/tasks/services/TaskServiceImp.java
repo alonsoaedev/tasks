@@ -52,7 +52,7 @@ public class TaskServiceImp implements TaskService{
 
     @Override
     public void remove(Long id) {
-
+        taskRepository.deleteById(id);
     }
 
     @Override
