@@ -41,8 +41,13 @@ public class TaskServiceImp implements TaskService{
     }
 
     @Override
-    public Task modify(Long id, String content) {
-        return null;
+    public Task modify(Long id, String content) throws EmptyTaskContentException, DuplicateTaskException, TaskNotFoundException {
+        Task oldTask = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException());
+        Task newTask = new Task(content);
+        boolean exist = taskRepository.findAll().stream().anyMatch(task -> task.equals(newTask));
+        if (exist) throw new DuplicateTaskException();
+        oldTask.setContent(newTask.getContent());
+        return taskRepository.save(oldTask);
     }
 
     @Override

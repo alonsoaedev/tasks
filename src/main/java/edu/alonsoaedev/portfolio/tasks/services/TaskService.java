@@ -11,7 +11,7 @@ public interface TaskService {
     List<Task> list();
     Task add(String content) throws EmptyTaskContentException, DuplicateTaskException;
     Task retrieve(Long id) throws TaskNotFoundException;
-    Task modify(Long id, String content);
+    Task modify(Long id, String content) throws EmptyTaskContentException, DuplicateTaskException, TaskNotFoundException;
     void remove(Long id);
     Task check(Long id);
 }
