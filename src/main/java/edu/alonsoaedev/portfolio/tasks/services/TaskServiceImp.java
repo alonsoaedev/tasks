@@ -56,7 +56,9 @@ public class TaskServiceImp implements TaskService{
     }
 
     @Override
-    public Task check(Long id) {
-        return null;
+    public Task check(Long id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException());
+        task.setChecked(!task.isChecked());
+        return taskRepository.save(task);
     }
 }

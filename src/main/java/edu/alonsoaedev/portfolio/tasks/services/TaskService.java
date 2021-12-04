@@ -13,5 +13,5 @@ public interface TaskService {
     Task retrieve(Long id) throws TaskNotFoundException;
     Task modify(Long id, String content) throws EmptyTaskContentException, DuplicateTaskException, TaskNotFoundException;
     void remove(Long id);
-    Task check(Long id);
+    Task check(Long id) throws TaskNotFoundException;
 }
