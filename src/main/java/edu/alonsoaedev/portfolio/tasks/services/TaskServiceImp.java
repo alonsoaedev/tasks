@@ -10,6 +10,7 @@ import edu.alonsoaedev.portfolio.tasks.entities.Task;
 import edu.alonsoaedev.portfolio.tasks.repositories.TaskRepository;
 import edu.alonsoaedev.portfolio.tasks.exceptions.EmptyTaskContentException;
 import edu.alonsoaedev.portfolio.tasks.exceptions.DuplicateTaskException;
+import edu.alonsoaedev.portfolio.tasks.exceptions.TaskNotFoundException;
 
 @Service
 @Qualifier("default")
@@ -35,8 +36,8 @@ public class TaskServiceImp implements TaskService{
     }
 
     @Override
-    public Task retrieve(Long id) {
-        return null;
+    public Task retrieve(Long id) throws TaskNotFoundException {
+        return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException());
     }
 
     @Override
