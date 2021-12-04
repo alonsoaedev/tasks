@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.alonsoaedev.portfolio.tasks.entities.Task;
 import edu.alonsoaedev.portfolio.tasks.repositories.TaskRepository;
+import edu.alonsoaedev.portfolio.tasks.exceptions.EmptyTaskContentException;
+import edu.alonsoaedev.portfolio.tasks.exceptions.DuplicateTaskException;
 
 @Service
 @Qualifier("default")
@@ -25,8 +27,11 @@ public class TaskServiceImp implements TaskService{
     }
 
     @Override
-    public Task add(String content) {
-        return null;
+    public Task add(String content) throws EmptyTaskContentException, DuplicateTaskException {
+        Task newTask = new Task(content);
+        boolean exist = taskRepository.findAll().stream().anyMatch(task -> task.equals(newTask));
+        if (exist) throw new DuplicateTaskException();
+        return taskRepository.save(newTask);
     }
 
     @Override
